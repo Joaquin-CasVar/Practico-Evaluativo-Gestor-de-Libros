@@ -2,6 +2,8 @@ let libros = JSON.parse(localStorage.getItem("libros")) || [];
 
 let editando = false;
 let indiceEdicion = null;
+let ordenAscendente = true;
+
 
 const form = document.querySelector("form");
 
@@ -33,41 +35,14 @@ form.addEventListener("submit", (e) => {
     renderizarResumen();
 });
 
-const filtrarLibros = () => {
-    const texto = document.getElementById("busqueda").value.toLowerCase();
+const ordenarPorAnio = () => {
+    const librosOrdenados = [...libros].sort((a, b) => {
+        return ordenAscendente ? a.anio - b.anio : b.anio - a.anio;
+    })
 
-    const librosFiltrados = libros.filter(libro =>
-        libro.titulo.toLowerCase().includes(texto) ||
-        libro.autor.toLowerCase().includes(texto) ||
-        libro.genero.toLowerCase().includes(texto)
-    );
-
-    renderizarLibros(librosFiltrados);
-};
-
-const actualizarAutores = () => {
-    const select = document.getElementById("filtroAutor");
-    const autoresUnicos = [...new Set(libros.map(libro => libro.autor))];
-
-    select.innerHTML = `<option value="">Todos los autores</option>`;
-    autoresUnicos.forEach(autor => {
-        const option = document.createElement("option");
-        option.value = autor.toLowerCase();
-        option.textContent = autor;
-        select.appendChild(option);
-    });
-};
-
-
-const filtrarPorAutor = () => {
-    const autor = document.getElementById("filtroAutor").value;
-    if (autor === "") {
-        renderizarLibros();
-    } else {
-        const autorFiltrados = libros.filter(libro => libro.autor.toLowerCase() === autor);
-        renderizarLibros(autorFiltrados);
-    }
-};
+    ordenAscendente = !ordenAscendente;
+    renderizarLibros(librosOrdenados);
+}
 
 const renderizarLibros = (lista = libros) => {
     const tabla = document.getElementById("tablaLibros").querySelector("tbody");
@@ -94,5 +69,4 @@ const renderizarResumen = () => {
 document.addEventListener("DOMContentLoaded", () => {
     renderizarLibros();
     renderizarResumen();
-    actualizarAutores();
 });
