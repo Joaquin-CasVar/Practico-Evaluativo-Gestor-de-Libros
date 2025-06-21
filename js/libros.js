@@ -1,14 +1,41 @@
 let libros = JSON.parse(localStorage.getItem("libros")) || [];
 
-const agregarLibro = (titulo, autor, anio, genero) => {
-    libros.push({ titulo, autor, anio, genero });
+let editando = false;
+let indiceEdicion = null;
+
+const form = document.querySelector("form");
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const titulo = document.getElementById("titulo").value.trim();
+    const autor = document.getElementById("autor").value.trim();
+    const anio = document.getElementById("anio").value;
+    const genero = document.getElementById("genero").value.trim();
+
+    if (!titulo || !autor || !anio || !genero) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
+    if (editando) {
+        libros[indiceEdicion] = { titulo, autor, anio, genero };
+        editando = false;
+        indiceEdicion = null;
+        document.querySelector('button[type="submit"]').innerText = 'Cargar Libro';
+    } else {
+        libros.push({ titulo, autor, anio, genero });
+    }
+
     localStorage.setItem("libros", JSON.stringify(libros));
-    renderizarLibros(); // Actualiza la tabla después de agregar
-};
+    form.reset();
+    renderizarLibros();
+    renderizarResumen();
+});
 
 const renderizarLibros = (lista = libros) => {
     const tabla = document.getElementById("tablaLibros").querySelector("tbody");
-    tabla.innerHTML = ""; // Limpiar la tabla antes de renderizar
+    tabla.innerHTML = "";
 
     lista.forEach((libro, index) => {
         const fila = document.createElement("tr");
@@ -18,32 +45,26 @@ const renderizarLibros = (lista = libros) => {
             <td>${libro.autor}</td>
             <td>${libro.anio}</td>
             <td>${libro.genero}</td>
+            <td>
+                <button onclick='eliminarLibro(${index})'>Eliminar</button>
+            </td>
         `;
         tabla.appendChild(fila);
     });
 };
 
+const eliminarLibro = (index) => {
+    libros.splice(index, 1);
+    localStorage.setItem("libros", JSON.stringify(libros));
+    renderizarLibros();
+}
+
+const renderizarResumen = () => {
+    const resumen = document.getElementById('resumenLibros');
+
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     renderizarLibros();
-
-    const form = document.querySelector("form");
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const titulo = document.getElementById("titulo").value;
-        const autor = document.getElementById("autor").value;
-        const anio = document.getElementById("anio").value;
-        const genero = document.getElementById("genero").value;
-
-        if (!titulo || !autor || !anio || !genero) {
-            alert("Por favor, completa todos los campos.");
-                return;
-        }
-
-        agregarLibro(titulo, autor, anio, genero);
-        form.reset();
-    });
+    renderizarResumen();
 });
-
-function mostrarResumen() {}
-function actualizarLibro() {}
