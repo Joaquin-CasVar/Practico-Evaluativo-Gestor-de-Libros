@@ -25,6 +25,7 @@ const agregarLibro = (titulo, autor, anio, genero) => {
     localStorage.setItem("libros", JSON.stringify(libros));
 
     renderizarLibros(); // Actualiza la tabla después de agregar
+    renderizarResumen();
 };
 
 const renderizarLibros = (lista = libros) => {
