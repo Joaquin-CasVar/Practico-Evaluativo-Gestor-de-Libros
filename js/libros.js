@@ -33,6 +33,42 @@ form.addEventListener("submit", (e) => {
     renderizarResumen();
 });
 
+const filtrarLibros = () => {
+    const texto = document.getElementById("busqueda").value.toLowerCase();
+
+    const librosFiltrados = libros.filter(libro =>
+        libro.titulo.toLowerCase().includes(texto) ||
+        libro.autor.toLowerCase().includes(texto) ||
+        libro.genero.toLowerCase().includes(texto)
+    );
+
+    renderizarLibros(librosFiltrados);
+};
+
+const actualizarAutores = () => {
+    const select = document.getElementById("filtroAutor");
+    const autoresUnicos = [...new Set(libros.map(libro => libro.autor))];
+
+    select.innerHTML = `<option value="">Todos los autores</option>`;
+    autoresUnicos.forEach(autor => {
+        const option = document.createElement("option");
+        option.value = autor.toLowerCase();
+        option.textContent = autor;
+        select.appendChild(option);
+    });
+};
+
+
+const filtrarPorAutor = () => {
+    const autor = document.getElementById("filtroAutor").value;
+    if (autor === "") {
+        renderizarLibros();
+    } else {
+        const autorFiltrados = libros.filter(libro => libro.autor.toLowerCase() === autor);
+        renderizarLibros(autorFiltrados);
+    }
+};
+
 const renderizarLibros = (lista = libros) => {
     const tabla = document.getElementById("tablaLibros").querySelector("tbody");
     tabla.innerHTML = "";
@@ -45,19 +81,10 @@ const renderizarLibros = (lista = libros) => {
             <td>${libro.autor}</td>
             <td>${libro.anio}</td>
             <td>${libro.genero}</td>
-            <td>
-                <button onclick='eliminarLibro(${index})'>Eliminar</button>
-            </td>
         `;
         tabla.appendChild(fila);
     });
 };
-
-const eliminarLibro = (index) => {
-    libros.splice(index, 1);
-    localStorage.setItem("libros", JSON.stringify(libros));
-    renderizarLibros();
-}
 
 const renderizarResumen = () => {
     const resumen = document.getElementById('resumenLibros');
@@ -67,4 +94,5 @@ const renderizarResumen = () => {
 document.addEventListener("DOMContentLoaded", () => {
     renderizarLibros();
     renderizarResumen();
+    actualizarAutores();
 });
