@@ -3,11 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/libros.css">
+    <link rel="stylesheet" href="styles/libros.css">
     <title>Practico Evaluativo</title>
 </head>
 <body>
-
+    <h1>Gestor de Biblioteca</h1>
+    <form action="">
+        <input type="text" id="titulo" placeholder="Titulo del libro" required>
+        <input type="text" id="autor" placeholder="Autor del libro" required>
+        <input type="number" id="anio" placeholder="Año de publicación del libro" min="1900" max="2025" required>
+        <input type="text" id="genero" placeholder="Genero del libro" required>
+        <button id="buttonForm" type="submit">Cargar libro</button>
+    </form>
+    <br>
+    <br>
+    <h3>- Tabla Libros -</h3>
+    <table border="1", id="tablaLibros">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Titulo</th>
+                <th>Autor</th>
+                <th>Año</th>
+                <th>Género</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
     <script src="./js/libros.js"></script>
 </body>
 </html>
