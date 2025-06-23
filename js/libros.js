@@ -28,29 +28,28 @@ form.addEventListener("submit", (e) => {
     }
 
     localStorage.setItem("libros", JSON.stringify(libros));
+    
     form.reset();
+
     renderizarLibros();
     renderizarResumen();
+    actualizarAutores();
 });
 
 const filtrarLibros = () => {
     const texto = document.getElementById("busqueda").value.toLowerCase();
 
-    const librosFiltrados = libros.filter(libro =>
-        libro.titulo.toLowerCase().includes(texto) ||
-        libro.autor.toLowerCase().includes(texto) ||
-        libro.genero.toLowerCase().includes(texto)
-    );
+    const librosFiltrados = libros.filter(libro => libro.titulo.toLowerCase().includes(texto));
 
     renderizarLibros(librosFiltrados);
 };
 
 const actualizarAutores = () => {
-    const select = document.getElementById("filtroAutor");
-    const autoresUnicos = [...new Set(libros.map(libro => libro.autor))];
+    const select = document.getElementById("filtroGenero");
+    const generosUnicos = [...new Set(libros.map(libro => libro.genero))];
 
-    select.innerHTML = `<option value="">Todos los autores</option>`;
-    autoresUnicos.forEach(autor => {
+    select.innerHTML = `<option value="">Todos los géneros</option>`;
+    generosUnicos.forEach(autor => {
         const option = document.createElement("option");
         option.value = autor.toLowerCase();
         option.textContent = autor;
@@ -59,13 +58,13 @@ const actualizarAutores = () => {
 };
 
 
-const filtrarPorAutor = () => {
-    const autor = document.getElementById("filtroAutor").value;
-    if (autor === "") {
+const filtrarPorGenero = () => {
+    const genero = document.getElementById("filtroGenero").value;
+    if (genero === "") {
         renderizarLibros();
     } else {
-        const autorFiltrados = libros.filter(libro => libro.autor.toLowerCase() === autor);
-        renderizarLibros(autorFiltrados);
+        const generoFiltrados = libros.filter(libro => libro.genero.toLowerCase() === genero);
+        renderizarLibros(generoFiltrados);
     }
 };
 
