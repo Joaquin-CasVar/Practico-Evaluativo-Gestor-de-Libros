@@ -72,17 +72,20 @@ const renderizarLibros = (lista = libros) => {
     const tabla = document.getElementById("tablaLibros").querySelector("tbody");
     tabla.innerHTML = "";
 
-    lista.forEach((libro, index) => {
+    lista.forEach(libro => {
+        // Obtener indice del array original
+        const indexReal = libros.indexOf(libro)
+
         const fila = document.createElement("tr");
         fila.innerHTML = `
-            <td>${index + 1}</td>
+            <td>${indexReal + 1}</td>
             <td>${libro.titulo}</td>
             <td>${libro.autor}</td>
             <td>${libro.anio}</td>
             <td>${libro.genero}</td>
             <td>
-                <button onclick='editarLibro(${index})'>Editar</button>
-                <button onclick='eliminarLibro(${index})'>Eliminar</button>
+                <button onclick='editarLibro(${indexReal})'>Editar</button>
+                <button onclick='eliminarLibro(${indexReal})'>Eliminar</button>
             </td>
         `;
         tabla.appendChild(fila);
