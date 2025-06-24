@@ -16,6 +16,14 @@
         <button id="buttonForm" type="submit">Cargar libro</button>
     </form>
     <br>
+    <h3>- Filtrar Libros por Título- </h3>
+    <input type="text" id="busqueda" placeholder="Buscar por título" oninput="filtrarLibros()">
+    <br>
+    <h3>- Filtro Libro por Género -</h3>
+    <select id="filtroGenero" onchange="filtrarPorGenero()">
+        <option value="">Todos los géneros</option>
+    </select>
+
     <br>
     <h3>- Tabla Libros -</h3>
     <table border="1", id="tablaLibros">

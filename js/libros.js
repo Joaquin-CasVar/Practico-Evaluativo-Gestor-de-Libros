@@ -32,9 +32,41 @@ form.addEventListener("submit", (e) => {
         form.reset();
         // Actualiza la tabla después de agregar
         renderizarLibros();
+        actualizarGeneros();
     }
 
 });
+
+const filtrarLibros = () => {
+    const texto = document.getElementById("busqueda").value.toLowerCase();
+
+    const librosFiltrados = libros.filter(libro => libro.titulo.toLowerCase().includes(texto));
+
+    renderizarLibros(librosFiltrados);
+};
+
+const actualizarGeneros = () => {
+    const select = document.getElementById("filtroGenero");
+    const generosUnicos = [...new Set(libros.map(libro => libro.genero))];
+
+    select.innerHTML = `<option value="">Todos los géneros</option>`;
+    generosUnicos.forEach(genero => {
+        const option = document.createElement("option");
+        option.value = genero.toLowerCase();
+        option.textContent = genero;
+        select.appendChild(option);
+    });
+};
+
+const filtrarPorGenero = () => {
+    const genero = document.getElementById("filtroGenero").value;
+    if (genero === "") {
+        renderizarLibros();
+    } else {
+        const generoFiltrados = libros.filter(libro => libro.genero.toLowerCase() === genero);
+        renderizarLibros(generoFiltrados);
+    }
+};
 
 const renderizarLibros = (lista = libros) => {
     const tabla = document.getElementById("tablaLibros").querySelector("tbody");
@@ -77,4 +109,5 @@ const eliminarLibro = (index) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     renderizarLibros();
+    actualizarGeneros();
 });
