@@ -2,6 +2,7 @@ let libros = JSON.parse(localStorage.getItem("libros")) || [];
 
 let editando = false;
 let indiceEdicion = null;
+let ordenAscendente = true;
 
 const form = document.querySelector("form");
 
@@ -38,9 +39,33 @@ form.addEventListener("submit", (e) => {
 
 });
 
+const renderizarLibros = (lista = libros) => {
+    const tabla = document.getElementById("tablaLibros").querySelector("tbody");
+    tabla.innerHTML = "";
+
+    lista.forEach(libro => {
+        // Obtener indice del array original
+        const indexReal = libros.indexOf(libro)
+
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${indexReal + 1}</td>
+            <td>${libro.titulo}</td>
+            <td>${libro.autor}</td>
+            <td>${libro.anio}</td>
+            <td>${libro.genero}</td>
+            <td>
+                <button onclick='editarLibro(${indexReal})'>Editar</button>
+                <button onclick='eliminarLibro(${indexReal})'>Eliminar</button>
+            </td>
+        `;
+        tabla.appendChild(fila);
+    });
+};
+
 const filtrarLibros = () => {
     const texto = document.getElementById("busqueda").value.toLowerCase();
-
+    
     const librosFiltrados = libros.filter(libro => libro.titulo.toLowerCase().includes(texto));
 
     renderizarLibros(librosFiltrados);
@@ -69,29 +94,14 @@ const filtrarPorGenero = () => {
     }
 };
 
-const renderizarLibros = (lista = libros) => {
-    const tabla = document.getElementById("tablaLibros").querySelector("tbody");
-    tabla.innerHTML = "";
+const ordenarPorAnio = () => {
+    const librosOrdenados = [...libros].sort((a, b) => {
+        return ordenAscendente ? a.anio - b.anio : b.anio - a.anio;
+    })
 
-    lista.forEach(libro => {
-        // Obtener indice del array original
-        const indexReal = libros.indexOf(libro)
-
-        const fila = document.createElement("tr");
-        fila.innerHTML = `
-            <td>${indexReal + 1}</td>
-            <td>${libro.titulo}</td>
-            <td>${libro.autor}</td>
-            <td>${libro.anio}</td>
-            <td>${libro.genero}</td>
-            <td>
-                <button onclick='editarLibro(${indexReal})'>Editar</button>
-                <button onclick='eliminarLibro(${indexReal})'>Eliminar</button>
-            </td>
-        `;
-        tabla.appendChild(fila);
-    });
-};
+    ordenAscendente = !ordenAscendente;
+    renderizarLibros(librosOrdenados);
+}
 
 const editarLibro = (index) => {
     const libro = libros[index]
