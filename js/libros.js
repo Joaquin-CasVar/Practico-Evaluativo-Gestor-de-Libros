@@ -1,5 +1,6 @@
 let libros = JSON.parse(localStorage.getItem("libros")) || [];
 
+let anioActual = new Date().getFullYear();
 let editando = false;
 let indiceEdicion = null;
 let ordenAscendente = true;
@@ -24,6 +25,15 @@ form.addEventListener("submit", (e) => {
 
             document.querySelector('button[type="submit"]').innerText = 'Cargar Libro'
         } else {
+            const existe = libros.some(libro => 
+                libro.titulo.toLowerCase() === titulo.toLowerCase() && 
+                libro.autor.toLowerCase() === autor.toLowerCase()
+            )
+
+            if (existe) {
+                alert('Este libro ya esta cargado en el listado')
+                return
+            }
             // Guarda en el array local
             libros.push({ titulo, autor, anio, genero });
         }
@@ -150,6 +160,8 @@ const renderizarResumen = () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const anio = document.getElementById("anio")
+    anio.setAttribute('max', anioActual)
     renderizarLibros();
     actualizarGeneros();
     renderizarResumen();
