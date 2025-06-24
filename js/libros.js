@@ -4,6 +4,7 @@ let editando = false;
 let indiceEdicion = null;
 
 const form = document.querySelector("form");
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -14,11 +15,11 @@ form.addEventListener("submit", (e) => {
 
     if (!titulo || !autor || !anio || !genero) {
         alert("Por favor, completa todos los campos.");
-            return;
     } else {
         if (editando) {
-            libros[indiceEdicion] = {titulo, autor, anio, genero}
+            libros[indiceEdicion] = { titulo, autor, anio, genero }
             editando = false
+            indiceEdicion = null;
 
             document.querySelector('button[type="submit"]').innerText = 'Cargar Libro'
         } else {
@@ -37,7 +38,7 @@ form.addEventListener("submit", (e) => {
 
 const renderizarLibros = (lista = libros) => {
     const tabla = document.getElementById("tablaLibros").querySelector("tbody");
-    tabla.innerHTML = ""; // Limpiar la tabla antes de renderizar
+    tabla.innerHTML = "";
 
     lista.forEach((libro, index) => {
         const fila = document.createElement("tr");
@@ -49,7 +50,7 @@ const renderizarLibros = (lista = libros) => {
             <td>${libro.genero}</td>
             <td>
                 <button onclick='editarLibro(${index})'>Editar</button>
-                <button onclick=''>Eliminar</button>
+                <button onclick='eliminarLibro(${index})'>Eliminar</button>
             </td>
         `;
         tabla.appendChild(fila);
@@ -66,6 +67,12 @@ const editarLibro = (index) => {
     document.querySelector('button[type="submit"]').innerText = 'Editar Libro'
     editando = true
     indiceEdicion = index
+}
+
+const eliminarLibro = (index) => {
+    libros.splice(index, 1);
+    localStorage.setItem("libros", JSON.stringify(libros));
+    renderizarLibros();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
