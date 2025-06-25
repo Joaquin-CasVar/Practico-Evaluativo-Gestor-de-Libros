@@ -129,6 +129,8 @@ const eliminarLibro = (index) => {
     libros.splice(index, 1);
     localStorage.setItem("libros", JSON.stringify(libros));
     renderizarLibros();
+    actualizarGeneros();
+    renderizarResumen();
 }
 
 const renderizarResumen = () => {
