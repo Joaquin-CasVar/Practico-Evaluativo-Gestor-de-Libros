@@ -67,12 +67,6 @@ const renderizarLibros = (lista = libros) => {
                 <button class="eliminar" onclick="eliminarLibro(${indexReal})">Eliminar</button>
             </div>
         </td>
-        <td>
-            <div class="botones">
-                <button class="leido" onclick="marcarComoLeido(${indexReal})">Leído</button>
-                <button class="no-leido" onclick="marcarComoNoLeido(${indexReal})">No leído</button>
-            </div>
-        </td>
         `;
 
         tabla.appendChild(fila);
