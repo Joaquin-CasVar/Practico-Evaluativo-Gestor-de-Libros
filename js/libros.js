@@ -14,39 +14,36 @@ form.addEventListener("submit", (e) => {
     const autor = document.getElementById("autor").value.trim();
     const anio = document.getElementById("anio").value;
     const genero = document.getElementById("genero").value.trim();
+    const leido = document.getElementById("leidoCheckbox").checked;
 
     if (!titulo || !autor || !anio || !genero) {
         alert("Por favor, completa todos los campos.");
     } else {
         if (editando) {
-            libros[indiceEdicion] = { titulo, autor, anio, genero }
+            libros[indiceEdicion] = { titulo, autor, anio, genero, leido };
             editando = false
             indiceEdicion = null;
-
             document.querySelector('button[type="submit"]').innerText = 'Cargar Libro'
         } else {
-            const existe = libros.some(libro => 
-                libro.titulo.toLowerCase() === titulo.toLowerCase() && 
+            const existe = libros.some(libro =>
+                libro.titulo.toLowerCase() === titulo.toLowerCase() &&
                 libro.autor.toLowerCase() === autor.toLowerCase()
             )
 
             if (existe) {
-                alert('Este libro ya esta cargado en el listado')
+                alert('Este libro ya está cargado en el listado')
                 return
             }
-            // Guarda en el array local
-            libros.push({ titulo, autor, anio, genero });
+
+            libros.push({ titulo, autor, anio, genero, leido });
         }
-        // Guarda en la local storage 
+
         localStorage.setItem("libros", JSON.stringify(libros));
-        // Limpia el formulario
         form.reset();
-        // Actualiza la tabla después de agregar
         renderizarLibros();
         actualizarGeneros();
         renderizarResumen();
     }
-
 });
 
 const renderizarLibros = (lista = libros) => {
@@ -54,30 +51,37 @@ const renderizarLibros = (lista = libros) => {
     tabla.innerHTML = "";
 
     lista.forEach(libro => {
-        // Obtener indice del array original
-        const indexReal = libros.indexOf(libro)
-
+        const indexReal = libros.indexOf(libro);
         const fila = document.createElement("tr");
+
         fila.innerHTML = `
-            <td>${indexReal + 1}</td>
-            <td>${libro.titulo}</td>
-            <td>${libro.autor}</td>
-            <td>${libro.anio}</td>
-            <td>${libro.genero}</td>
-            <td>
-                <button onclick='editarLibro(${indexReal})'>Editar</button>
-                <button onclick='eliminarLibro(${indexReal})'>Eliminar</button>
-            </td>
+        <td class="celda">${indexReal + 1}</td>
+        <td class="celda">${libro.titulo}</td>
+        <td class="celda">${libro.autor}</td>
+        <td class="celda">${libro.anio}</td>
+        <td class="celda">${libro.genero}</td>
+        <td class="celda">${libro.leido ? "Sí" : "No"}</td>
+        <td>
+            <div class="botones">
+                <button class="editar" onclick="editarLibro(${indexReal})">Editar</button>
+                <button class="eliminar" onclick="eliminarLibro(${indexReal})">Eliminar</button>
+            </div>
+        </td>
+        <td>
+            <div class="botones">
+                <button class="leido" onclick="marcarComoLeido(${indexReal})">Leído</button>
+                <button class="no-leido" onclick="marcarComoNoLeido(${indexReal})">No leído</button>
+            </div>
+        </td>
         `;
+
         tabla.appendChild(fila);
     });
 };
 
 const filtrarLibros = () => {
     const texto = document.getElementById("busqueda").value.toLowerCase();
-    
     const librosFiltrados = libros.filter(libro => libro.titulo.toLowerCase().includes(texto));
-
     renderizarLibros(librosFiltrados);
 };
 
@@ -104,26 +108,39 @@ const filtrarPorGenero = () => {
     }
 };
 
+const filtrarPorLeido = () => {
+    const valor = document.getElementById("filtroLeido").value;
+    let resultado = libros;
+
+    if (valor === "leido") {
+        resultado = libros.filter(libro => libro.leido === true);
+    } else if (valor === "noLeido") {
+        resultado = libros.filter(libro => libro.leido === false);
+    }
+
+    renderizarLibros(resultado);
+};
+
 const ordenarPorAnio = () => {
     const librosOrdenados = [...libros].sort((a, b) => {
         return ordenAscendente ? a.anio - b.anio : b.anio - a.anio;
-    })
+    });
 
     ordenAscendente = !ordenAscendente;
     renderizarLibros(librosOrdenados);
-}
+};
 
 const editarLibro = (index) => {
-    const libro = libros[index]
+    const libro = libros[index];
     document.getElementById("titulo").value = libro.titulo;
     document.getElementById("autor").value = libro.autor;
     document.getElementById("anio").value = libro.anio;
     document.getElementById("genero").value = libro.genero;
 
-    document.querySelector('button[type="submit"]').innerText = 'Editar Libro'
-    editando = true
-    indiceEdicion = index
-}
+    document.querySelector('button[type="submit"]').innerText = 'Editar Libro';
+    editando = true;
+    indiceEdicion = index;
+};
 
 const eliminarLibro = (index) => {
     libros.splice(index, 1);
@@ -131,39 +148,43 @@ const eliminarLibro = (index) => {
     renderizarLibros();
     actualizarGeneros();
     renderizarResumen();
-}
+};
+
+const marcarComoLeido = (index) => {
+    libros[index].leido = true;
+    localStorage.setItem("libros", JSON.stringify(libros));
+    renderizarLibros();
+};
+
+const marcarComoNoLeido = (index) => {
+    libros[index].leido = false;
+    localStorage.setItem("libros", JSON.stringify(libros));
+    renderizarLibros();
+};
 
 const renderizarResumen = () => {
-    const resumen = document.getElementById('resumenLibros')
+    const resumen = document.getElementById('resumenLibros');
+    const total = libros.length;
 
-    // Total de libros registrados
-    const total = libros.length
+    const sumaAnios = libros.reduce((acum, libro) => acum + parseInt(libro.anio), 0);
+    const promedio = total > 0 ? Math.round(sumaAnios / total) : 0;
 
-    // Promedio del año de publicación
-    const sumaAnios = libros.reduce((acum, libro) => acum + parseInt(libro.anio), 0)
-    const promedio = Math.round(sumaAnios / total)
+    const posteriores2010 = libros.filter(libro => libro.anio > 2010).length;
 
-    // Cuántos libros son posteriores al año 2010
-    const posteriores2010 = libros.filter(libro => libro.anio > 2010).length
-
-    // Libro más antiguo (mostrar título y año)
-    const libroViejo = libros.reduce((viejo, libro) => (libro.anio < viejo.anio ? libro : viejo), libros[0])
-    
-    // Libro más reciente (mostrar título y año)
-    const libroNuevo = libros.reduce((nuevo, libro) => (libro.anio > nuevo.anio ? libro : nuevo), libros[0])
+    const libroViejo = total > 0 ? libros.reduce((viejo, libro) => (libro.anio < viejo.anio ? libro : viejo)) : {};
+    const libroNuevo = total > 0 ? libros.reduce((nuevo, libro) => (libro.anio > nuevo.anio ? libro : nuevo)) : {};
 
     resumen.innerHTML = `
-    <p>Total de libros: ${total}</p>
-    <p>Año de publicación promedio: ${promedio}</p>
-    <p>Cantidad de libros posteriores a 2010: ${posteriores2010}</p>
-    <p>Libro más antiguo: ${libroViejo.titulo} - ${libroViejo.anio}</p>
-    <p>Libro más reciente: ${libroNuevo.titulo} - ${libroNuevo.anio}</p>
-    `
-}
+        <p>Total de libros: ${total}</p>
+        <p>Año de publicación promedio: ${promedio}</p>
+        <p>Cantidad de libros posteriores a 2010: ${posteriores2010}</p>
+        <p>Libro más antiguo: ${libroViejo.titulo || "-"} - ${libroViejo.anio || "-"}</p>
+        <p>Libro más reciente: ${libroNuevo.titulo || "-"} - ${libroNuevo.anio || "-"}</p>
+    `;
+};
 
 document.addEventListener("DOMContentLoaded", () => {
-    const anio = document.getElementById("anio")
-    anio.setAttribute('max', anioActual)
+    document.getElementById("anio").setAttribute('max', anioActual);
     renderizarLibros();
     actualizarGeneros();
     renderizarResumen();
