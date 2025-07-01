@@ -130,6 +130,7 @@ const editarLibro = (index) => {
     document.getElementById("autor").value = libro.autor;
     document.getElementById("anio").value = libro.anio;
     document.getElementById("genero").value = libro.genero;
+    document.getElementById("leidoCheckbox").checked = libro.leido;
 
     document.querySelector('button[type="submit"]').innerText = 'Editar Libro';
     editando = true;
@@ -142,18 +143,6 @@ const eliminarLibro = (index) => {
     renderizarLibros();
     actualizarGeneros();
     renderizarResumen();
-};
-
-const marcarComoLeido = (index) => {
-    libros[index].leido = true;
-    localStorage.setItem("libros", JSON.stringify(libros));
-    renderizarLibros();
-};
-
-const marcarComoNoLeido = (index) => {
-    libros[index].leido = false;
-    localStorage.setItem("libros", JSON.stringify(libros));
-    renderizarLibros();
 };
 
 const renderizarResumen = () => {
