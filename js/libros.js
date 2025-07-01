@@ -157,12 +157,17 @@ const renderizarResumen = () => {
     const libroViejo = total > 0 ? libros.reduce((viejo, libro) => (libro.anio < viejo.anio ? libro : viejo)) : {};
     const libroNuevo = total > 0 ? libros.reduce((nuevo, libro) => (libro.anio > nuevo.anio ? libro : nuevo)) : {};
 
+    const librosLeidos = libros.filter(libro => libro.leido === true).length;
+    console.log(librosLeidos);
+
     resumen.innerHTML = `
         <p>Total de libros: ${total}</p>
         <p>Año de publicación promedio: ${promedio}</p>
         <p>Cantidad de libros posteriores a 2010: ${posteriores2010}</p>
         <p>Libro más antiguo: ${libroViejo.titulo || "-"} - ${libroViejo.anio || "-"}</p>
         <p>Libro más reciente: ${libroNuevo.titulo || "-"} - ${libroNuevo.anio || "-"}</p>
+        <p>Libros leídos: ${librosLeidos}</p>
+        <p>Libros no leídos: ${total - librosLeidos}</p>
     `;
 };
 
