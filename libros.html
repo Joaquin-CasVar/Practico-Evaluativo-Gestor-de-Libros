@@ -3,48 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/libros.css">
     <title>Practico Evaluativo</title>
+    <link rel="stylesheet" href="styles/libros.css">
 </head>
 <body>
-    <h1>Gestor de Biblioteca</h1>
-    <form>
-        <input type="text" id="titulo" placeholder="Titulo del libro" required>
-        <input type="text" id="autor" placeholder="Autor del libro" required>
-        <input type="number" id="anio" placeholder="Año de publicación del libro" min="1900" required>
-        <input type="text" id="genero" placeholder="Genero del libro" required>
-        <button id="buttonForm" type="submit">Cargar libro</button>
-    </form>
-    <br>
-    <h3>- Filtrar Libros por Título- </h3>
-    <input type="text" id="busqueda" placeholder="Buscar por título" oninput="filtrarLibros()">
-    <br>
-    <h3>- Filtro Libro por Género -</h3>
-    <select id="filtroGenero" onchange="filtrarPorGenero()">
-        <option value="">Todos los géneros</option>
-    </select>
+    <div>
+        <h1 class="titulo">Gestor de Biblioteca</h1>
+        <form>
+            <input class="tarjeta" type="text" id="titulo" placeholder="Titulo del libro" required>
+            <input class="tarjeta" type="text" id="autor" placeholder="Autor del libro" required>
+            <input class="tarjeta" type="number" id="anio" placeholder="Año de publicación del libro" min="1900" required>
+            <input class="tarjeta" type="text" id="genero" placeholder="Genero del libro" required>
+        
+            <label class="tarjeta">
+                <input type="checkbox" id="leidoCheckbox"> ¿Leído?
+            </label>
+        
+            <button class="tarjeta" id="buttonForm" type="submit">Cargar libro</button>
+        </form>        
+    </div>
 
-    <h3>- Ordenar Por Año -</h3>
-    <button onclick="ordenarPorAnio()">Ordenar Libros</button>
     <br>
-    <h3>- Tabla Libros -</h3>
-    <table border="1", id="tablaLibros">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Año</th>
-                <th>Género</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
 
-    <h3>- Resumen estadistico de la biblioteca -</h3>
-    <section id="resumenLibros"></section>
+    <div class="filtrosContainer">
+        <div class="filtroBloque">
+            <h3 class="titulo">- Filtrar Libros por Título -</h3>
+            <input class="filterOrder" type="text" id="busqueda" placeholder="Buscar por título" oninput="filtrarLibros()">
+        </div>
+
+        <div class="filtroBloque">
+            <h3 class="titulo">- Filtro Libro por Género -</h3>
+            <select class="filterOrder" id="filtroGenero" onchange="filtrarPorGenero()">
+                <option value="">Todos los géneros</option>
+            </select>
+        </div>
+
+        <div class="filtroBloque">
+            <h3 class="titulo">- Ordenar Por Año -</h3>
+            <button class="filterOrder" onclick="ordenarPorAnio()">Ordenar Libros</button>
+        </div>
+
+        <div class="filtroBloque">
+            <h3 class="titulo">- Filtro libro Leídos -</h3>
+            <select class="filterOrder" id="filtroLeido" onchange="filtrarPorLeido()">
+                <option value="">Todos los libros</option>
+                <option value="leido">Leídos</option>
+                <option value="noLeido">No Leídos</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <h3 class="titulo">- Tabla Libros -</h3>
+        <table class="table" border="1" id="tablaLibros">
+            <thead>
+                <tr>
+                    <th class="tarjeta">#</th>
+                    <th class="tarjeta">Título</th>
+                    <th class="tarjeta">Autor</th>
+                    <th class="tarjeta">Año</th>
+                    <th class="tarjeta">Género</th>
+                    <th class="tarjeta">Leído</th>
+                    <th class="tarjeta">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3 class="titulo">- Resumen estadistico de la biblioteca -</h3>
+        <section class="resumen" id="resumenLibros"></section>
+    </div>
 
     <script src="./js/libros.js"></script>
 </body>

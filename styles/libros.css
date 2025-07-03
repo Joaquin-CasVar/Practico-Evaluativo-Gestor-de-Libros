@@ -1,0 +1,100 @@
+.titulo {
+    text-align: center;
+    font-size: 2em;
+    color: #333;
+}
+
+.tarjeta {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px;
+    margin: 10px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.filterOrder {
+    padding: 16px;
+    width: 90%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    color: #333;
+    text-align: center;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.filtrosContainer {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 25px auto;
+    max-width: 1400px;
+    gap: 5px;
+}
+
+.filtroBloque {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 250px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    padding-bottom: 15px;
+}
+
+.editar {
+    background-color: lightblue;
+    color: black;
+    padding: 5px 10px;
+}
+
+.eliminar {
+    background-color: lightcoral;
+    color: black;
+    padding: 5px 10px;
+}
+
+.leido {
+    background-color: lightgreen;
+    color: black;
+    padding: 5px 10px;
+}
+
+.no-leido {
+    background-color: lightcoral;
+    color: black;
+    padding: 5px 10px;
+}
+
+.resumen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.celda {
+    padding: 10px;
+}
